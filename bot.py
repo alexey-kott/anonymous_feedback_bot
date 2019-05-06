@@ -33,11 +33,16 @@ async def ping_handler(message: Message):
     await message.reply("I'm alive")
 
 
+@dp.message_handler(commands=['start'])
+async def start_handler(message: Message):
+    await message.reply("Привет! Этот бот создан для сбора анонимного фидбэка. "
+                        "Ты можешь отправить мне любое сообщение и оно будет переслано в чат без указания твоего имени.")
+
+
 @dp.message_handler(content_types=[ContentType.ANY])
 async def message_handler(message: Message):
-    chat =
-    for chat in Chat.select():
-        print(chat)
+    chat = Chat.get_by_message(message)
+
 
 
 if __name__ == "__main__":

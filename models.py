@@ -1,3 +1,5 @@
+from random import choice
+
 from aiogram.types import Message, CallbackQuery
 from peewee import SqliteDatabase, Model, IntegerField, TextField, DateTimeField, IntegrityError, ForeignKeyField
 
@@ -36,8 +38,24 @@ class User(BaseClass):
     first_name = TextField()
     last_name = TextField(null=True)
 
+    @classmethod
+    def get_by_message(cls, message: Message):
+        user, created = User.get_or_create()
+
 
 class Animal(BaseClass):
     name = TextField()
     user = ForeignKeyField(User, backref='animals')
 
+    @staticmethod
+    def get_random():
+        animal_list = ['Alligator', 'Anteater', 'Armadillo', 'Auroch', 'Axolotl', 'Badger', 'Bat', 'Bear', 'Beaver',
+                       'Buffalo', 'Camel', 'Capybara', 'Chameleon', 'Cheetah', 'Chinchilla', 'Chipmunk', 'Chupacabra',
+                       'Cormorant', 'Coyote', 'Crow', 'Dingo', 'Dinosaur', 'Dog', 'Dolphin', 'Duck', 'Elephant',
+                       'Ferret', 'Fox', 'Frog', 'Giraffe', 'Gopher', 'Grizzly', 'Hedgehog', 'Hippo', 'Hyena', 'Ibex',
+                       'Ifrit', 'Iguana', 'Jackal', 'Kangaroo', 'Koala', 'Kraken', 'Lemur', 'Leopard', 'Liger', 'Lion',
+                       'Llama', 'Loris', 'Manatee', 'Mink', 'Monkey', 'Moose', 'Narwhal', 'NyanCat', 'Orangutan',
+                       'Otter', 'Panda', 'Penguin', 'Platypus', 'Pumpkin', 'Python', 'Quagga', 'Rabbit', 'Raccoon',
+                       'Rhino', 'Sheep', 'Shrew', 'Skunk', 'Squirrel', 'Tiger', 'Turtle', 'Walrus', 'Wolf', 'Wolverine',
+                       'Wombat']
+        return choice(animal_list)
