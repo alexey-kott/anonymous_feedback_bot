@@ -43,6 +43,11 @@ async def start_handler(message: Message):
                         "Отправь мне любое сообщение и оно будет переслано в чат без указания твоего имени.")
 
 
+@dp.message_handler(commands=['author', 'about', 'info'])
+async def ping_handler(message: Message):
+    await message.reply("По вопросам создания ботов обращаться к @alexkott")
+
+
 @dp.message_handler(content_types=[ContentType.ANY])
 async def message_handler(message: Message):
     mode = message.chat.type
