@@ -21,7 +21,7 @@ class Chat(BaseClass):
 
 
 class User(BaseClass):
-    username = TextField()
+    username = TextField(null=True)
     first_name = TextField()
     last_name = TextField(null=True)
     animal = TextField()
