@@ -65,6 +65,6 @@ class User(BaseClass):
 
 class Msg(BaseClass):
     dt = DateTimeField(default=datetime.now)
-    text = TextField()
+    text = TextField(null=True)
     user = ForeignKeyField(User, backref='messages')
     mode = TextField()
