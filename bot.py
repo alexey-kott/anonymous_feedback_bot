@@ -5,12 +5,12 @@ import requests
 from aiohttp import BasicAuth
 from aiogram.utils import executor
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message, ContentType
+from aiogram.types import Message, ContentType, InlineKeyboardMarkup, InlineKeyboardButton
 from requests.exceptions import ConnectionError
 from googletrans import Translator
 
 from config import BOT_TOKEN, PROXY_HOST, PROXY_PASS, PROXY_PORT, PROXY_USERNAME
-from models import Chat, User, Msg
+from models import Chat, User, Msg, UserHashMatching
 
 logging.basicConfig(level=logging.INFO)
 translator = Translator()
@@ -30,6 +30,7 @@ def init():
     Chat.create_table(fail_silently=True)
     User.create_table(fail_silently=True)
     Msg.create_table(fail_silently=True)
+    UserHashMatching.create_table(fail_silently=True)
 
 
 @dp.message_handler(commands=['ping'])
@@ -59,7 +60,11 @@ async def message_handler(message: Message):
         for chat in Chat.select():
             sender_title = translator.translate(f"Unidentified {user.animal} writes:", dest='ru', src='en').text
             msg_text = f"*{sender_title}* \n{message.text}"
-            await bot.send_message(chat_id=chat.id, text=msg_text, parse_mode='Markdown')
+
+            inline_keyboard = InlineKeyboardMarkup()
+            inline_button = InlineKeyboardButton('Ответить в боте', switch_inline_query=f'Ответить {user.animal}:')
+            inline_keyboard.add(inline_button)
+            await bot.send_message(chat_id=chat.id, text=msg_text, parse_mode='Markdown', reply_markup=inline_keyboard)
             await sleep(1)
 
 
